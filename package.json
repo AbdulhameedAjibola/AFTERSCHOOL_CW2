@@ -1,0 +1,28 @@
+{
+  "name": "afterschool_cw2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbdulhameedAjibola/AFTERSCHOOL_CW2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbdulhameedAjibola/AFTERSCHOOL_CW2/issues"
+  },
+  "homepage": "https://github.com/AbdulhameedAjibola/AFTERSCHOOL_CW2#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongodb": "^6.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.1"
+  }
+}
