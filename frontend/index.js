@@ -28,23 +28,77 @@ let app = new Vue({
                 console.error('There was a problem with the fetch operation:', error);
             }
         },
+        async checkOut() {
+            try {
+                const order = {
+                    customerName: this.customerName,
+                    customerNumber: this.customerNumber,
+                    items: this.cart
+                };
+                const response = await fetch(`${this.serverUrl}/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order)
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert(data.msg);
+                    await this.updateAvailability();
+                    this.showLessons = true;
+                    this.cart = [];
+                    this.customerName = '';
+                    this.customerNumber = '';
+                } else {
+                    alert('Error placing order');
+                }
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('Error placing order');
+            }
+        },
+        async updateAvailability() {
+            try {
+                // Iterate through the cart and update availability for each lesson
+                const uniqueLessons = [...new Set(this.cart)]; // Get unique lesson IDs from the cart
+                for (const lessonId of uniqueLessons) {
+                    const decrementValue = this.cartCount(lessonId); // Use cartCount method to get count
+                    const response = await fetch(`${this.serverUrl}/lessons/${lessonId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ decrementValue })
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to update lesson availability');
+                    }
+                }
+                this.getLessons(); // Refresh lessons to update availability
+            } catch (error) {
+                console.error('There was a problem updating the lesson availability:', error);
+                alert('Error updating lesson availability');
+            }
+        },
         getImageUrl(imagePath) {
             return `${this.serverUrl}/${imagePath}`;
         },
         canAddToCart(lesson) {
             return lesson.availability > this.cartCount(lesson.id);
         },
-        cartCount(id) {
+        cartCount(_id) {
             let count = 0;
             for (let i = 0; i < this.cart.length; i++) {
-                if (this.cart[i] === id) {
+                if (this.cart[i] === _id) {
                     count++;
                 }
             }
             return count;
         },
         addToCart(lesson) {
-            this.cart.push(lesson.id);
+            this.cart.push(lesson._id);
         },
         removeFromCart(lessonID) {
             let index = this.cart.indexOf(lessonID);
@@ -69,15 +123,15 @@ let app = new Vue({
                 this.showLessons = true;
             }
         },
-        checkOut() {
-            alert("Order Placed");
-            this.showLessons = !this.showLessons;
-            this.cart = [];
-            this.customerName = '';
-            this.customerNumber = '';
-        },
+        // checkOut() {
+        //     alert("Order Placed");
+        //     this.showLessons = !this.showLessons;
+        //     this.cart = [];
+        //     this.customerName = '';
+        //     this.customerNumber = '';
+        // },
         sortLessons() {
-            this.sortedLessons = [...this.lessons];
+            
             // Sort the lessons based on the selected criteria
             if (this.sortBy === 'subject') {
                 this.sortedLessons.sort((a, b) => this.sortFunction(a.subject, b.subject));

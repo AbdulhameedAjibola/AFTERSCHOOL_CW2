@@ -20,9 +20,9 @@ app.use(corsMiddleware)
 
     
      // // Routes
-    app.get('/',updateLessons, (req, res)=>{
-
-    })
+        app.get('/', updateLessons, (req, res) =>{
+            res.send("Please navigate to /lessons")
+        })
      app.use('/lessons', lessonsRouter);
      app.use('/orders', ordersRouter);
 

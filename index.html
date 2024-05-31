@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     
-    <link rel="stylesheet" href="styles.css">
-    <script src="index.js"></script>
+    <link rel="stylesheet" href="./frontend/styles.css">
+  
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital@0;1&display=swap" rel="stylesheet">
@@ -78,12 +78,12 @@
                             <p>Location: {{ lesson.location }}</p>
                             <div class="price-stock">
                                 <p> DHS {{ lesson.price }}</p>
-                                <span>Available Stock: {{ lesson.availability - cartCount(lesson.id) }}</span>
+                                <span>Available Stock: {{ lesson.availability - cartCount(lesson._id) }}</span>
                             </div>
                             <button class="add-to-cart-button" v-on:click="addToCart(lesson)" :disabled="!canAddToCart(lesson)">Add to Cart</button>
                             <div class="message">
-                                <span v-if="lesson.availability === cartCount(lesson.id)">Lesson Out of Stock</span>
-                                <span v-else-if="lesson.availability - cartCount(lesson.id)">
+                                <span v-if="lesson.availability === cartCount(lesson._id)">Lesson Out of Stock</span>
+                                <span v-else-if="lesson.availability - cartCount(lesson._id)">
                                     Hurry now!. {{ lesson.availability - cartCount(lesson.id) }} Spaces Left!
                                 </span>
                                 <span v-else>Seats Available! Buy Now!</span>
@@ -99,16 +99,16 @@
             <div class="cart-items" >
                 <div class="cart-item" v-for="lessonID in cartSet" :key="lessonID">
                     
-                    <div v-if="lesson = lessons.find(lesson => lesson.id === lessonID)" class="item-data">
+                    <div v-if="lesson = lessons.find(lesson => lesson._id === lessonID)" class="item-data">
                         <div class="item-image">
-                            <img v-bind:src="lesson.image" class="cart-lesson-image" alt="lesson image">
+                            <img v-bind:src="getImageUrl(lesson.image)" class="cart-lesson-image" alt="lesson image">
                         </div>
                         <h2>{{ lesson.subject }}</h2>
                         <p>{{ lesson.description }}</p>
                         <p>{{ lesson.location }}</p>
                         <div class="price-stock">
                             <p> DHS {{ lesson.price }}</p>
-                            <span>Available Stock: {{ lesson.availability - cartCount(lesson.id) }}</span>
+                            <span>Available Stock: {{ lesson.availability - cartCount(lesson._id) }}</span>
                         </div>
                     </div>
                 </div>
@@ -117,23 +117,26 @@
                 </div>
                 
             </div>
-        </div>
-        <div class="checkout-details">
-            <div class="details-input">
-                <h2 class="order-title">Please enter Order Details</h2>
-                <label for="Name">Customer Name</label> <br>
-                <input type="text" name="" id="" v-model="customerName"> <br>
-                <span class="message" v-if="!isValidText()">Please enter your name (Alphabets Only) and not more than 15 characters.</span><br>
-                <label for="Number">Phone Number</label> <br>
-                <input type="number" name="" id="" v-model="customerNumber"> <br>
-                <span class="message" v-if="!isValidNumber()">Please enter your complete Phone Number (Digits Only)</span>
-            </div>
-            <button  v-if="showCheckoutButton()" v-on:click="checkOut" class="place-order">Buy Now!</button>
-            <button disabled v-else class="place-order">Buy Now!</button>
-        </div>
-    </div>
-</div>
 
+            <div class="checkout-details">
+                <div class="details-input">
+                    <h2 class="order-title">Please enter Order Details</h2>
+                    <label for="Name">Customer Name</label> <br>
+                    <input type="text" name="" id="" v-model="customerName"> <br>
+                    <span class="message" v-if="!isValidText()">Please enter your name (Alphabets Only) and not more than 15 characters.</span><br>
+                    <label for="Number">Phone Number</label> <br>
+                    <input type="number" name="" id="" v-model="customerNumber"> <br>
+                    <span class="message" v-if="!isValidNumber()">Please enter your complete Phone Number (Digits Only)</span>
+                </div>
+                <button  v-if="showCheckoutButton()" v-on:click="checkOut" class="place-order">Buy Now!</button>
+                <button disabled v-else class="place-order">Buy Now!</button>
+            </div>
+        </div>
+        
+    </div>
+
+
+  <script src="./frontend/index.js"></script>
 
 </body>
 </html>

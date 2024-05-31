@@ -33,32 +33,28 @@ router.get('/search', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res, next) => {
+
+outer.put('/:id', async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const updateData = req.body;
-
-        if (!ObjectId.isValid(id)) {
-            return res.status(400).send({ msg: 'Invalid ID' });
-        }
-
-        const result = await req.db.collection('lessons').updateOne(
-            { _id: new ObjectId(id) },
-            { $set: updateData },
-            { upsert: false }
-        );
+        const lessonId = new ObjectId(req.params.id);
+        console.log('Lesson ID:', lessonId); // Debug: Log lessonId
+        const decrementValue = req.body.decrementValue;
+        console.log('Decrement Value:', decrementValue); // Debug: Log decrementValue
+        const update = { $inc: { availability: -decrementValue } };
+        console.log('Update:', update); // Debug: Log update operation
+        const result = await req.db.collection('lessons').updateOne({ _id: lessonId }, update);
 
         if (result.matchedCount === 1) {
-            res.send({ msg: 'success' });
+            res.send({ msg: 'Lesson availability updated successfully' });
         } else {
-            res.send({ msg: 'error' });
+            res.status(404).send({ msg: 'Lesson not found' });
         }
     } catch (err) {
+        console.error('Error updating lesson availability:', err);
+        res.status(500).send({ msg: 'Error updating lesson availability' });
         next(err);
     }
 });
-
-
 
 
 
