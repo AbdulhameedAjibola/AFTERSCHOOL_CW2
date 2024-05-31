@@ -6,3 +6,5 @@ const updateLessons = (req, res, next) =>{
     }
     next();
 }
+
+module.exports = updateLessons;
