@@ -19,6 +19,7 @@ const dbMiddleware = async (req, res, next) => {
             db = await connectToDb();
         }
         req.db = db;
+        
         next();
     } catch (err) {
         console.error('Failed to connect to the database:', err);

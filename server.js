@@ -8,6 +8,7 @@ const dbUrl = 'mongodb+srv://akoredeajibola091:FirstDB@cluster0.ovcqnha.mongodb.
 const app = express();
 var path = require('path');
 const corsMiddleware = require('./middleware/corsMiddleware')
+const updateLessons = require('./middleware/updateAvailability')
 
 
 // Middleware
@@ -17,10 +18,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(connectDB)
 app.use(corsMiddleware)
 
-
+    
      // // Routes
+    app.get('/',updateLessons, (req, res)=>{
+
+    })
      app.use('/lessons', lessonsRouter);
      app.use('/orders', ordersRouter);
+
 
      // Start the server only after DB connection
      app.listen(PORT, () => {

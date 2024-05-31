@@ -2,8 +2,10 @@ const express = require('express')
 const ObjectId = require('mongodb').ObjectId;
 const router = express.Router()
 
+
 router.get('/', async (req, res) =>{
     try {
+        
         const lessons = await req.db.collection('lessons').find().toArray()
         res.json(lessons)
     } catch (error) {
@@ -66,4 +68,4 @@ module.exports = router;
 
 
 
-module.exports = router;
+// module.exports = router;
