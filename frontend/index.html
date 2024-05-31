@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="lessons.js"></script>
+    
     <link rel="stylesheet" href="styles.css">
     <script src="index.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,10 +67,10 @@
             </section>
             
             <section class="main">
-                <div class="lessons" v-for="lesson in searchLessons">
+                <div class="lessons" v-for="lesson in lessons">
                     <div class="lesson">
                         <div class="image-holder">
-                            <img v-bind:src="getImageUrl()" class="lesson-image" alt="lesson image">
+                            <img v-bind:src="getImageUrl(lesson.image)" class="lesson-image" alt="lesson image">
                         </div>
                         <div class="lesson-description">
                             <h2>{{ lesson.subject }}</h2>
