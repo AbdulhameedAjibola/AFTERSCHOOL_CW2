@@ -60,27 +60,14 @@ let app = new Vue({
             }
         },
         async updateAvailability() {
-            try {
-                // Iterate through the cart and update availability for each lesson
-                const uniqueLessons = [...new Set(this.cart)]; // Get unique lesson IDs from the cart
-                for (const lessonId of uniqueLessons) {
-                    const decrementValue = this.cartCount(lessonId); // Use cartCount method to get count
-                    const response = await fetch(`${this.serverUrl}/lessons/${lessonId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ decrementValue })
-                    });
-                    if (!response.ok) {
-                        throw new Error('Failed to update lesson availability');
-                    }
-                }
-                this.getLessons(); // Refresh lessons to update availability
-            } catch (error) {
-                console.error('There was a problem updating the lesson availability:', error);
-                alert('Error updating lesson availability');
-            }
+            items.forEach((item) => {
+                fetch(`${this.serverUrl}lessons/${item.lesson._id}`, {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ avaliability: item.lesson.avaliability }),
+                });
+              });
+               
         },
         getImageUrl(imagePath) {
             return `${this.serverUrl}/${imagePath}`;
