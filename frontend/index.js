@@ -9,6 +9,7 @@ let app = new Vue({
         cart: [],
         sortedLessons: [],
         sortBy: '',
+        lesson : '',
         ascending: false,
         descending: false,
         searchTerm: '',
@@ -46,7 +47,7 @@ let app = new Vue({
                 const data = await response.json();
                 if (response.ok) {
                     alert(data.msg);
-                    await this.updateAvailability();
+                    this.updateLessons();
                     this.showLessons = true;
                     this.cart = [];
                     this.customerName = '';
@@ -57,23 +58,38 @@ let app = new Vue({
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
                 alert('Error placing order');
+                
             }
         },
-        async updateAvailability() {
-            items.forEach((item) => {
-                fetch(`${this.serverUrl}lessons/${item.lesson._id}`, {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ avaliability: item.lesson.avaliability }),
-                });
-              });
-               
+        
+        async searchLessons(){
+            try {
+
+                if (!this.searchTerm.trim()) {
+                    alert('Search term cannot be empty');
+                    return;
+                }
+
+                const queries = new URLSearchParams();
+                queries.append('subject', this.searchTerm)
+                queries.append('location', this.searchTerm)
+                const response = await fetch(`${this.serverUrl}/lessons/search?${queries.toString()}`,
+                
+            );
+                const lessons = await response.json();
+                
+                this.sortedLessons = lessons;
+                } catch (error) {
+                    console.error('Error searching lessons:', error);
+                }
+            
         },
+      
         getImageUrl(imagePath) {
             return `${this.serverUrl}/${imagePath}`;
         },
         canAddToCart(lesson) {
-            return lesson.availability > this.cartCount(lesson.id);
+            return lesson.availability > this.cartCount(lesson._id);
         },
         cartCount(_id) {
             let count = 0;
@@ -87,8 +103,8 @@ let app = new Vue({
         addToCart(lesson) {
             this.cart.push(lesson._id);
         },
-        removeFromCart(lessonID) {
-            let index = this.cart.indexOf(lessonID);
+        removeFromCart(_id) {
+            let index = this.cart.indexOf(_id);
             if (index !== -1) {
                 this.cart.splice(index, 1);
             }
@@ -142,6 +158,35 @@ let app = new Vue({
                 return a - b;
             }
         },
+         
+        async updateLessons() {
+            try {
+                for (const lessonId of this.cart) {
+                    const lesson = this.lessons.find(lesson => lesson._id === lessonId);
+                    if (lesson) {
+                        const decrement = this.cartCount(lessonId);
+                        const updatedSpaces = lesson.availability - decrement;
+        
+                        // Update lesson availability on the server
+                        const response = await fetch(`${this.serverUrl}/lessons/${lessonId}`, {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ availability: updatedSpaces })
+                        });
+        
+                        if (!response.ok) {
+                            throw new Error(`Failed to update lesson ${lessonId}`);
+                        }
+        
+                        // Update lesson availability
+                        await this.getLessons();
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating lessons:', error);
+            }
+        }
+        
     },
     computed: {
         cartItemCount() {

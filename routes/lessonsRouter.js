@@ -3,15 +3,17 @@ const ObjectId = require('mongodb').ObjectId;
 const router = express.Router()
 
 
-router.get('/', async (req, res) =>{
+router.get('/', async (req, res) => {
     try {
         
-        const lessons = await req.db.collection('lessons').find().toArray()
-        res.json(lessons)
+        await req.db.collection('lessons').updateMany({}, { $set: { availability: 10 } });
+        const lessons = await req.db.collection('lessons').find().toArray();
+        res.json(lessons);
     } catch (error) {
-        res.status(500).send("Error retrieving lessons")
+        res.status(500).send("Error retrieving lessons");
     }
-})
+});
+
 
 router.get('/search', async (req, res) => {
     try {
@@ -37,8 +39,10 @@ router.get('/search', async (req, res) => {
 router.put('/:id', async (req, res) => {
     
         try {
-          req.db.collection('lessons')
-            .updateOne({ _id: new ObjectId(req.params.id) }, { $set: req.body })
+            const lessonId = new ObjectId(req.params.id);
+            
+            await req.db.collection('lessons')
+            .updateOne({ _id: lessonId }, {$set: {availability: updatedSpaces}})
             .then((results) => {
               res.send(results);
             });

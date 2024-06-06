@@ -21,7 +21,7 @@
             <div class="nav-items">
                 <div class="search">
                     <input type="text" placeholder="Search Lessons" class="search-bar" v-model="searchTerm">   
-                    <button class="search-button">Search</button> 
+                    <button class="search-button" @click ="searchLessons" >Search</button> 
                 </div>
             </div>
             <div class="cart-buttons">
@@ -67,7 +67,7 @@
             </section>
             
             <section class="main">
-                <div class="lessons" v-for="lesson in lessons">
+                <div class="lessons" v-for="lesson in sortedLessons">
                     <div class="lesson">
                         <div class="image-holder">
                             <img v-bind:src="getImageUrl(lesson.image)" class="lesson-image" alt="lesson image">
@@ -84,7 +84,7 @@
                             <div class="message">
                                 <span v-if="lesson.availability === cartCount(lesson._id)">Lesson Out of Stock</span>
                                 <span v-else-if="lesson.availability - cartCount(lesson._id)">
-                                    Hurry now!. {{ lesson.availability - cartCount(lesson.id) }} Spaces Left!
+                                    Hurry now!. {{ lesson.availability - cartCount(lesson._id) }} Spaces Left!
                                 </span>
                                 <span v-else>Seats Available! Buy Now!</span>
                             </div>
@@ -111,10 +111,11 @@
                             <span>Available Stock: {{ lesson.availability - cartCount(lesson._id) }}</span>
                         </div>
                     </div>
+                    <div class="delete-from-cart">
+                        <button class="remove-from-cart" v-on:click="removeFromCart(lessonID)">Remove from Cart</button>
+                    </div>
                 </div>
-                <div class="delete-from-cart">
-                    <button class="remove-from-cart" v-on:click="removeFromCart(lessonID)">Remove from Cart</button>
-                </div>
+                
                 
             </div>
 

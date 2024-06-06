@@ -18,11 +18,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(connectDB)
 app.use(corsMiddleware)
 
+app.use((req, res, next) => {
+    var log = `${req.ip} -- ${req.method} ${req.path} ${res.statusCode}"`;
+    console.log(log, req.body);
+    next();
+  });
     
-     // // Routes
-        app.get('/', updateLessons, (req, res) =>{
-            res.send("Please navigate to /lessons")
-        })
+     
      app.use('/lessons', lessonsRouter);
      app.use('/orders', ordersRouter);
 
