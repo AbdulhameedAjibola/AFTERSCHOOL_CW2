@@ -39,12 +39,16 @@ router.get('/search', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const lessonId = new ObjectId(req.params.id);
-        
+        const { availability: updatedSpaces } = req.body; 
 
-        await req.db.collection('lessons')
-            .updateOne({ _id: lessonId }, { $set: req.body });
+        const result = await req.db.collection('lessons')
+            .updateOne({ _id: lessonId }, { $set: { availability: updatedSpaces } });
 
-       
+        if (result.modifiedCount === 1) {
+            res.status(200).send({ success: true, message: 'Lesson updated successfully.' });
+        } else {
+            res.status(404).send({ success: false, message: 'Lesson not found.' });
+        }
     } catch (error) {
         console.error('Error updating lesson:', error);
         res.status(500).send({ success: false, message: 'An error occurred while updating the lesson.' });

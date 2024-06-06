@@ -179,7 +179,7 @@ let app = new Vue({
                         }
         
                         // Update lesson availability
-                        await this.getLessons();
+                         this.getLessons();
                     }
                 }
             } catch (error) {
