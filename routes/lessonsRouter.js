@@ -37,20 +37,20 @@ router.get('/search', async (req, res) => {
 
 
 router.put('/:id', async (req, res) => {
-    
-        try {
-            const lessonId = new ObjectId(req.params.id);
-            
-            await req.db.collection('lessons')
-            .updateOne({ _id: lessonId }, {$set: {availability: updatedSpaces}})
-            .then((results) => {
-              res.send(results);
-            });
-        } catch (error) {
-          console.log(error);
-        }
-    
+    try {
+        const lessonId = new ObjectId(req.params.id);
+        
+
+        await req.db.collection('lessons')
+            .updateOne({ _id: lessonId }, { $set: req.body });
+
+       
+    } catch (error) {
+        console.error('Error updating lesson:', error);
+        res.status(500).send({ success: false, message: 'An error occurred while updating the lesson.' });
+    }
 });
+
 
 
 
