@@ -6,7 +6,7 @@ const router = express.Router()
 router.get('/', async (req, res) => {
     try {
         
-        await req.db.collection('lessons').updateMany({}, { $set: { availability: 10 } });
+        //await req.db.collection('lessons').updateMany({}, { $set: { availability: 10 } });
         const lessons = await req.db.collection('lessons').find().toArray();
         res.json(lessons);
     } catch (error) {
