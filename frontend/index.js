@@ -161,7 +161,7 @@ let app = new Vue({
          
         async updateLessons() {
             try {
-                for (const lessonId of this.cart) {
+                for (const lessonId of this.cartSet) {
                     const lesson = this.lessons.find(lesson => lesson._id === lessonId);
                     if (lesson) {
                         const decrement = this.cartCount(lessonId);

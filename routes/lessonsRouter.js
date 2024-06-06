@@ -39,10 +39,10 @@ router.get('/search', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const lessonId = new ObjectId(req.params.id);
-        const { availability: updatedSpaces } = req.body; 
+        
 
         const result = await req.db.collection('lessons')
-            .updateOne({ _id: lessonId }, { $set: { availability: updatedSpaces } });
+            .updateOne({ _id: lessonId }, { $set:  req.body  });
 
         if (result.modifiedCount === 1) {
             res.status(200).send({ success: true, message: 'Lesson updated successfully.' });
