@@ -65,10 +65,7 @@ let app = new Vue({
         async searchLessons(){
             try {
 
-                if (!this.searchTerm.trim()) {
-                    alert('Search term cannot be empty');
-                    return;
-                }
+               
 
                 const queries = new URLSearchParams();
                 queries.append('subject', this.searchTerm)
@@ -84,6 +81,10 @@ let app = new Vue({
                 }
             
         },
+        debouncedSearchLessons: _.debounce(function () {
+            this.searchLessons();
+          }, 300), // Adjust the debounce time as needed
+        
       
         getImageUrl(imagePath) {
             return `${this.serverUrl}/${imagePath}`;
@@ -197,6 +198,7 @@ let app = new Vue({
         }
     },
     watch: {
+        searchTerm: 'debouncedSearchLessons',
         sortBy() {
             this.sortLessons();
         },
