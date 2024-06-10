@@ -24,7 +24,7 @@ let app = new Vue({
                     throw new Error('Network response was not ok');
                 }
                 this.lessons = await response.json();
-                this.sortedLessons = [...this.lessons]; // Initialize sortedLessons with fetched lessons
+                this.sortedLessons = [...this.lessons]; 
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
             }
