@@ -48,37 +48,25 @@
         </header>
 
         <div class="show-lesson" v-if="showLessons">
+           
             <section class="sort-section">
+                <h2>Apply Filters</h2>
                 <div class="sort">
-                    <h2>Apply Filters</h2>
-                    
                     <span class="criteria">
-                        <input type="radio" name="sortingCriteria" id="sortBySubject" v-model="sortBy" :value="'subject'">
-                        <label for="sortBySubject" class="checkbox-text">By Subject</label>
+                        <select v-model="sortBy" @change="sortLessons">
+                            <option value="">Select Sorting Criteria</option>
+                            <option value="subject">By Subject</option>
+                            <option value="location">By Location</option>
+                            <option value="price">By Price</option>
+                            <option value="availability">By Availability</option>
+                        </select>
                     </span>
                     <span class="criteria">
-                        <input type="radio" name="sortingCriteria" id="sortByLocation" v-model="sortBy" :value="'location'"> 
-                        <label for="sortByLocation" class="checkbox-text">By Location</label>
+                        <select v-model="sortOrder" @change="sortLessons">
+                            <option value="ascending">Ascending Order</option>
+                            <option value="descending">Descending Order</option>
+                        </select>
                     </span>
-                    <span class="criteria">
-                        <input type="radio" name="sortingCriteria" id="sortByPrice" v-model="sortBy" :value="'price'">
-                        <label for="sortByPrice" class="checkbox-text"> By Price</label>
-                    </span>
-                    <span class="criteria">
-                        <input type="radio" name="sortingCriteria" id="sortByAvailability" v-model="sortBy" :value="'availability'">
-                        <label for="sortByAvailability" class="checkbox-text">By Availability</label>
-                    </span>
-                    
-                    <div class="order">
-                        <div class="criteria">
-                            <input type="checkbox" name="ascending" id="ascendingOrder" v-model="ascending">
-                            <label for="ascendingOrder" class="checkbox-text">Ascending Order</label>
-                        </div>
-                        <div class="criteria">
-                            <input type="checkbox" name="descending" id="descendingOrder" v-model="descending">
-                            <label for="descendingOrder" class="checkbox-text">Descending Order</label>
-                        </div>
-                    </div>
                 </div>
             </section>
             
