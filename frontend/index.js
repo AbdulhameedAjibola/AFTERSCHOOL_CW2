@@ -1,3 +1,4 @@
+
 let app = new Vue({
     el: '#app',
     data: {
@@ -9,14 +10,17 @@ let app = new Vue({
         cart: [],
         sortedLessons: [],
         sortBy: '',
+        sortOrder: 'ascending',
         lesson : '',
         ascending: false,
         descending: false,
         searchTerm: '',
         customerName: '',
         customerNumber: '',
+        
     },
     methods: {
+       
         async getLessons() {
             try {
                 const response = await fetch(`${this.serverUrl}/lessons`);
@@ -24,7 +28,7 @@ let app = new Vue({
                     throw new Error('Network response was not ok');
                 }
                 this.lessons = await response.json();
-                this.sortedLessons = [...this.lessons]; 
+                this.sortedLessons = [...this.lessons]; // Initialize sortedLessons with fetched lessons
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
             }
@@ -65,7 +69,10 @@ let app = new Vue({
         async searchLessons(){
             try {
 
-               
+                if (!this.searchTerm.trim()) {
+                    alert('Search term cannot be empty');
+                    return;
+                }
 
                 const queries = new URLSearchParams();
                 queries.append('subject', this.searchTerm)
@@ -81,10 +88,6 @@ let app = new Vue({
                 }
             
         },
-        debouncedSearchLessons: _.debounce(function () {
-            this.searchLessons();
-          }, 300), // Adjust the debounce time as needed
-        
       
         getImageUrl(imagePath) {
             return `${this.serverUrl}/${imagePath}`;
@@ -127,29 +130,28 @@ let app = new Vue({
                 this.showLessons = true;
             }
         },
-        // checkOut() {
-        //     alert("Order Placed");
-        //     this.showLessons = !this.showLessons;
-        //     this.cart = [];
-        //     this.customerName = '';
-        //     this.customerNumber = '';
-        // },
+        
         sortLessons() {
-            
-            // Sort the lessons based on the selected criteria
-            if (this.sortBy === 'subject') {
-                this.sortedLessons.sort((a, b) => this.sortFunction(a.subject, b.subject));
-            } else if (this.sortBy === 'price') {
-                this.sortedLessons.sort((a, b) => this.sortFunction(a.price, b.price));
-            } else if (this.sortBy === 'location') {
-                this.sortedLessons.sort((a, b) => this.sortFunction(a.location, b.location));
-            } else if (this.sortBy === 'availability') {
-                this.sortedLessons.sort((a, b) => this.sortFunction(a.availability, b.availability));
+            if (!this.sortBy) {
+                this.sortedLessons = [...this.lessons];
+                return;
             }
+            
+            if (this.sortBy) {
+                if (this.sortBy === 'subject') {
+                    this.sortedLessons.sort((a, b) => this.sortFunction(a.subject, b.subject));
+                } else if (this.sortBy === 'price') {
+                    this.sortedLessons.sort((a, b) => this.sortFunction(a.price, b.price));
+                } else if (this.sortBy === 'location') {
+                    this.sortedLessons.sort((a, b) => this.sortFunction(a.location, b.location));
+                } else if (this.sortBy === 'availability') {
+                    this.sortedLessons.sort((a, b) => this.sortFunction(a.availability, b.availability));
+                }
 
-            // Reverse the sorted array if descending flag is true
-            if (this.descending) {
-                this.sortedLessons.reverse();
+                // Reverse the sorted array if descending is selected
+                if (this.sortOrder === 'descending') {
+                    this.sortedLessons.reverse();
+                }
             }
         },
         sortFunction(a, b) {
@@ -159,6 +161,8 @@ let app = new Vue({
                 return a - b;
             }
         },
+    
+
          
         async updateLessons() {
             try {
@@ -198,7 +202,6 @@ let app = new Vue({
         }
     },
     watch: {
-        searchTerm: 'debouncedSearchLessons',
         sortBy() {
             this.sortLessons();
         },
@@ -219,3 +222,15 @@ let app = new Vue({
         this.getLessons();
     }
 });
+
+const toggleBtn = document.querySelector('.toggle_btn')
+const toggleBtnIcon = document.querySelector('.toggle_btn i')
+const dropDownMenu = document.querySelector('.dropdown_menu')
+
+toggleBtn.onclick = () => {
+    dropDownMenu.classList.toggle('open')
+    const isOpen = dropDownMenu.classList.contains('open')
+
+    toggleBtnIcon.classList = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'
+}
+
