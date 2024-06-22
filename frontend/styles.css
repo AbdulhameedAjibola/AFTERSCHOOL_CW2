@@ -22,7 +22,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    background-color: wheat;
+    
   }
   .navbar .links {
     display: flex;
@@ -40,7 +40,7 @@ header {
   .dropdown_menu {
     display: none;
     position: absolute;
-    
+     
     top: 60px;
     height:0;
     width: 300px;
@@ -93,11 +93,12 @@ header {
 
 
 .search-bar {
-    width: 350px;
+    width: 300px;
     padding: 6px;
+    margin: 10px;
     font-size: 16px;
     background-color: white;
-    border-radius: 8px 0 0 8px;
+    border-radius: 8px;
     border: 1px black solid;
     outline: none;
 }
@@ -121,11 +122,16 @@ header {
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.237);
 }
 
+.sort-section h2{
+    color: wheat;
+  
+    margin: 10px;
+}
 
 
 /* Main content styling */
 .main {
-    margin: 20px 0;
+    margin: 20px 5px 0px 5px;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -193,6 +199,9 @@ header {
 }
 
 /* Cart and checkout styling */
+.showCheckout{
+    margin: 30px;
+}
 .cart-items {
     margin-top: 30px;
     display: flex;
@@ -212,14 +221,16 @@ header {
 
 .item-data {
     display: flex;
+    flex-direction: column;
     gap: 20px;
     justify-content: space-between;
 }
 
 .cart-lesson-image {
     height: 180px;
-    width: 100%;
-    max-width: 220px;
+    width: auto;
+
+    max-width: 350px;
     border-radius: 8px;
 }
 
