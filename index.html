@@ -15,22 +15,37 @@
 </head>
 <body> 
     <div id="app">
-        <div class="navbar">
-            <div class="logo">
-                <h2>{{ header }}</h2>
-            </div>
-            <div class="nav-items">
-                <div class="search">
-                    <input type="text" placeholder="Search Lessons" class="search-bar" v-model="searchTerm">   
-                    <!-- <button class="search-button" @click ="searchLessons">Search</button>  -->
+        <header>
+            <div class="navbar">
+                <div class="logo">
+                    <h2>{{ header }}</h2>
                 </div>
+                <ul class="links">
+                    <li><input type="text" placeholder="Search Lessons" class="search-bar" v-model="searchTerm"></li>
+                    
+                    
+                    <li>
+                        <button class="show-checkout" v-on:click="showCheckout" v-if="cartItemCount >= 1">View Cart ({{ cartItemCount }})</button>
+                        <button class="show-checkout" v-else-if="isCartEmpty()">View Cart ({{ cartItemCount }})</button>
+                        <button class="show-checkout" v-else disabled>View Cart ({{ cartItemCount }})</button>
+                    </li>
+                    
+                </ul>
+               
+                <div class="toggle_btn"><i class="fa-solid fa-bars"></i></div>
             </div>
-            <div class="cart-buttons">
-                <button class="show-checkout" v-on:click="showCheckout" v-if="cartItemCount >= 1">View Cart ({{ cartItemCount }})</button>
-                <button class="show-checkout" v-else-if="isCartEmpty()">View Cart ({{ cartItemCount }})</button>
-                <button class="show-checkout" v-else disabled>View Cart ({{ cartItemCount }})</button>
+
+            <div class="dropdown_menu">
+                <input type="text" placeholder="Search Lessons" class="search-bar" v-model="searchTerm">
+                
+                <div class="cart-buttons">
+                    <button class="show-checkout" v-on:click="showCheckout" v-if="cartItemCount >= 1">View Cart ({{ cartItemCount }})</button>
+                    <button class="show-checkout" v-else-if="isCartEmpty()">View Cart ({{ cartItemCount }})</button>
+                    <button class="show-checkout" v-else disabled>View Cart ({{ cartItemCount }})</button>
+                </div>
+    
             </div>
-        </div>
+        </header>
 
         <div class="show-lesson" v-if="showLessons">
             <section class="sort-section">
